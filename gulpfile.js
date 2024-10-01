@@ -46,6 +46,12 @@ function gdsprecompiledjs() {
 };
 gulp.task('gdsprecompiledjs')
 
+function gdsprecompiledjsMaps() {
+  return gulp.src('node_modules/govuk-frontend/dist/govuk' + '/**/*.map', {base: 'node_modules/govuk-frontend/dist/govuk'})
+    .pipe(gulp.dest('assets/js'));
+};
+gulp.task('gdsprecompiledjsMaps')
+
 //build
 
-exports.build = series(buildsass, /*unusedcss,*/ minifycss, gdsprecompiledAssets, gdsprecompiledjs);
+exports.build = series(buildsass, /*unusedcss,*/ minifycss, gdsprecompiledAssets, gdsprecompiledjs, gdsprecompiledjsMaps);

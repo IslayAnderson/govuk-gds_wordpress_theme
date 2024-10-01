@@ -30,6 +30,10 @@
 			</footer>
 			
 		<?php wp_footer(); ?>
+		<script type="module">
+			import { initAll } from '<?= get_stylesheet_directory_uri() . '/assets/js/govuk-frontend.min.js' ?>'
+			initAll()
+		</script>
 
 	</body>
 

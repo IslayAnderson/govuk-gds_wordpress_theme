@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "create-block/govuk-accordion",
+	"version": "0.1.0",
+	"title": "Govuk Accordion",
+	"category": "widgets",
+	"description": "The accordion component lets users show and hide sections of related content on a page.",
+	"example": {},
+	"attributes": {
+	  "accordion": {
+			  "type": "array",
+			  "default": []
+		  }
+	},
+	"supports": {
+	  "color": {
+		"background": false,
+		"text": true
+	  },
+	  "html": false,
+	  "typography": {
+		"fontSize": true
+	  }
+	},
+	"textdomain": "govuk-accordion",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"render": "file:./render.php"
+  }

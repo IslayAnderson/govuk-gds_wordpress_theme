@@ -49,18 +49,42 @@ function gdstheme_remove_recent_comments_style() {
 	}
 }
 
+function add_type_attribute($tag, $handle, $src) {
+    // if not your script, do nothing and return original $tag
+    if ( stripos($handle, 'module') < 1 ) {
+        return $tag;
+    }
+    // change the script tag by adding type="module" and return it.
+    $tag = '<script type="module" src="' . esc_url( $src ) . '"></script>';
+    return $tag;
+}
+add_filter('script_loader_tag', 'add_type_attribute' , 10, 3);
 
 function gdstheme_scripts_and_styles() {
 	global $wp_styles; // call global $wp_styles variable to add conditional wrapper around ie stylesheet the WordPress way
 	if (!is_admin()) {
 		// register main stylesheet
 		wp_register_style( 'stylesheet', get_stylesheet_directory_uri() . '/assets/css/main.css', array(), '', 'all' );
-		wp_register_style( 'additional_stylesheet', get_stylesheet_directory_uri() . '/assets/css/additional.css', array(), '', 'all' );
+		// register main javascript
+		wp_register_script( 'bundle', get_stylesheet_directory_uri() . '/assets/js/all.bundle.js', array(), '', 'all' );
+		wp_register_script( 'frontend-module', get_stylesheet_directory_uri() . '/assets/js/govuk-frontend.min.js', array(), '', 'all' );
 
 		// enqueue styles and scripts
 		wp_enqueue_style( 'stylesheet' );
-		wp_enqueue_style( 'additional_stylesheet' );
+		wp_enqueue_script( 'bundle' );
+		wp_enqueue_script( 'frontend-module' );
+		
 	}
+}
+
+add_action('wp', 'queue_component_scripts');
+function queue_component_scripts(){
+	$scripts = array(
+		array(
+			"govuk-accordion",
+			"accordion-bundle-js"
+		),
+	);
 }
 
 
@@ -208,6 +232,20 @@ function gdstheme_launch() {
 	// include composer 
 	add_action('init', function(){
 		include(get_template_directory(). '/vendor/autoload.php');
+	});
+	// include blocks
+	add_action('init', function(){
+		$filenames = glob(get_template_directory(). '/src/blocks/*/build/block.json');
+		foreach ($filenames as $filename) {
+			register_block_type( $filename );
+		}
+	});
+	// asset redirect hack TODO: fix this 
+	add_action('template_redirect', function(){
+		$uri = explode("/", $_SERVER['REQUEST_URI']);
+		if($uri[1] == "assets"){
+			wp_redirect(get_stylesheet_directory_uri().implode('/',$uri));
+		}
 	});
 
 	// launching operation cleanup
@@ -425,6 +463,8 @@ function gdstheme_body_class($option){
 			break;
 	}
 }
+
+
 
 
 

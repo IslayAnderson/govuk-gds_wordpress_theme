@@ -32,6 +32,7 @@
 	</head>
 
 	<body class="govuk-template__body js-enabled govuk-frontend-supported govuk-body <?= gdstheme_body_class('string') ?>" itemscope itemtype="http://schema.org/WebPage">
+	<script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
 		
 	<header class="govuk-header" data-module="govuk-header">
 		<div class="govuk-header__container govuk-width-container">
